@@ -58,7 +58,7 @@ single-ended and serial computer bus.
 ## <a name='application-skeleton'>Application skeleton</a>
 
 ```sh
-~/mhirba/sws/utils-legato-mqtt ❯❯❯ tree .
+~/mhirba/sws/mangoh-to-airvantage ❯❯❯ tree .
 .
 ├── Makefile
 ├── mqtt.api
@@ -181,21 +181,6 @@ sources:
   main.cc
 }
 
-// collections of information that can be exchanged with cloud services
-assets:
-{
-  office =
-  {
-    variables:
-    {
-      float temperature
-      float gyroscope_x
-      float gyroscope_y
-      float gyroscope_z
-    }
-  }
-}
-
 // command-line arguments to pass to the c++ compiler
 cxxflags:
 {
@@ -296,7 +281,7 @@ void DeviceToCloud::start()
   // calling lsm6ds3 configuration section
   _lsm6ds3.begin();
 
-  LE_INFO("LSM6DS3 BEGIN!");
+  LE_INFO("LSM6DS3 SET");
 
   // create timer with an interval of every 10 seconds, repeating forever (0)
   le_clk_Time_t repeat_interval;
@@ -352,7 +337,7 @@ void DeviceToCloud::send()
   // check that we have WAN
   if(mdc_state == LE_MDC_DISCONNECTED) {
     le_data_Request();
-    LE_INFO("WAN CONNECTED" );
+    LE_INFO("WAN CONNECTED");
   }
   else if(!_is_mqtt_connected) {
     // check that mqttService is up
@@ -387,7 +372,7 @@ The purpose is to simply verify connection, format last acquired data and send a
 Just call `make` with our specific target and install the app on the board:
 
 ```sh
-❯ make wp85
+❯❯❯ make wp85
 mkapp -v -t wp85 \
 -i /legato/interfaces/airVantage \
 -i myComponent/utils/i2c \
@@ -404,7 +389,7 @@ Application 'mangohToAirvantage' contains executable 'mangohToAirvantage'.
 ```
 
 ```sh
-❯ app install mangohToAirvantage.wp85.update 192.168.2.2
+❯❯❯ app install mangohToAirvantage.wp85.update 192.168.2.2
 Applying update from file 'mangohToAirvantage.wp85.update' to device at address '192.168.2.2'.
 Unpacking package: 100% ++++++++++++++++++++++++++++++++++++++++++++++++++
 Applying update: 100% ++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -417,13 +402,14 @@ Done
 We are going to run our applications.
 
 ```sh
-❯ ssh root@192.168.2.2
+❯❯❯ ssh root@192.168.2.2
 root@swi-mdm9x15:~# app status
 [running] audioService
 ...
 [running] mqttService
 [stopped] mangohToAirvantage
 root@swi-mdm9x15:~# app start mangohToAirvantage
+root@swi-mdm9x15:~# logread
 ...
 Jul 25 17:06:37 swi-mdm9x15 user.info Legato:  INFO | mangohToAirvantage[8312]/myComponent T=main | main.cc _myComponent_COMPONENT_INIT() 24 | Hi, from deviceToCloud app!
 ...
