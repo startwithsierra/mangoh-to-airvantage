@@ -470,7 +470,7 @@ Connect to the **AirVantage** website to configure and monitor your mangOH board
 
 ### Next
 
-Well, that's it. Easy right? 😎
+Well, that's it. Easy right? 😎<br />
 Take a look at our other samples using IoT cards: bluetooth, WiFi, canBUS in our repository.
 
 ### Credits
